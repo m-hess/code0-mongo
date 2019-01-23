@@ -4,6 +4,8 @@ import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
+import * as Polls from './controllers/poll_controller';
+
 
 // initialize
 const app = express();
@@ -39,12 +41,33 @@ app.use(bodyParser.json());
 //   res.send('hi');
 // });
 
-//test index.ejs
-app.get('/', (req, res) => {
-  // we will later be able to get the polls by calling a function, but let's pass in no polls for now
-  const polls = [];
-  res.render('index', { polls });
-});
+// //test index.ejs
+// app.get('/', (req, res) => {
+//   // we will later be able to get the polls by calling a function, but let's pass in no polls for now
+//   const polls = [];
+//   res.render('index', { polls });
+// });
+
+//GET / : Call Polls.getPolls and render index
+app.get('/', (req, res)) => {
+  Polls.getPolls().then((polls) => {
+     res.render('index', { polls });
+  }).catch((error) => {
+     res.send(`error: ${error}`);
+  });
+}
+
+// GET /new : Render the new page
+
+//POST /new : Call Polls.createPoll()
+
+// POST /vote/:id : Call Polls.vote() and return success (used to upvote or downvote)
+
+
+
+
+
+
 
 // START THE SERVER
 // =============================================================================
