@@ -24,3 +24,16 @@
   </div>
 </body>
 </html>
+
+<script>
+$('.vote').click(function(event) {
+  event.preventDefault();
+  var vote=$(event.currentTarget).data('vote');
+  var id=$(event.currentTarget).data('id');
+  $.ajax({
+    type: "POST",
+    url: "/vote/"+id,
+    data: {vote}
+  }).done(location.reload());
+});
+</script>

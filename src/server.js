@@ -6,7 +6,6 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import * as Polls from './controllers/poll_controller';
 
-
 // initialize
 const app = express();
 
@@ -49,21 +48,37 @@ app.use(bodyParser.json());
 // });
 
 //GET / : Call Polls.getPolls and render index
-app.get('/', (req, res)) => {
+app.get('/', (req, res) => {
   Polls.getPolls().then((polls) => {
      res.render('index', { polls });
   }).catch((error) => {
      res.send(`error: ${error}`);
   });
-}
+});
 
 // GET /new : Render the new page
+app.get('/new', (req, res) => {
+  res.render('new');
+});
 
 //POST /new : Call Polls.createPoll()
+app.post('/new', (req, res) => {
+  const newpoll = {
+    text: req.body.text,
+    imageURL: req.body.imageURL,
+  };
+  Polls.createPoll(newpoll).then((poll) => {
+    res.redirect('/');
+  });
+});
 
 // POST /vote/:id : Call Polls.vote() and return success (used to upvote or downvote)
-
-
+app.post('/vote/:id', (req, res) => {
+  const vote = (req.body.vote === 'up');// convert to bool
+  Polls.vote(req.params.id, vote).then((result) => {
+    res.send(result);
+  });
+});
 
 
 
